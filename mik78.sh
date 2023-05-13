@@ -26,13 +26,10 @@ ETH=`ip route show default | sed -n 's/.* dev \([^\ ]*\) .*/\1/p'` && \
 ADDRESS=`ip addr show $ETH | grep global | cut -d' ' -f 6 | head -n 1` && \
 GATEWAY=`ip route list | grep default | cut -d' ' -f 3` && \
 
-mount -o loop,offset=512 chr-$CHR_VERSION.img /mnt
-
-ls /mnt
-
-echo "" > /mnt/rw/autorun.scr
-
-umount /mnt
+#mount -o loop,offset=512 chr-$CHR_VERSION.img /mnt
+#ls /mnt
+#echo "" > /mnt/rw/autorun.scr
+#umount /mnt
 
 echo u > /proc/sysrq-trigger && \
 dd if=chr-$CHR_VERSION.img of=/dev/$STORAGE && \
