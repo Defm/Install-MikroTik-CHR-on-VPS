@@ -35,13 +35,11 @@ ip route list | grep default | cut -d' ' -f 3
 For MikroTik 7.8
 
 ```bash
-  bash -c "$(curl -L https://raw.githubusercontent.com/Defm/Install-MikroTik-CHR-on-VPS/main/mik78.sh)"
-  
-  bash -c "$(wget --no-check-certificate -L https://raw.githubusercontent.com/Defm/Install-MikroTik-CHR-on-VPS/main/mik78.sh)"
+  bash -c "$(curl -L https://raw.githubusercontent.com/Defm/iCHR/main/mik78.sh)"
 ```
 
 ```bash
-  bash -c "$(wget --no-check-certificate -L https://raw.githubusercontent.com/Defm/Install-MikroTik-CHR-on-VPS/main/mik78.sh)"
+  bash -c "$(wget --no-check-certificate -L https://raw.githubusercontent.com/Defm/iCHR/main/mik78.sh)"
 ```
 
 After install be sure to turn off the server and turn on again
