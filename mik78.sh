@@ -11,7 +11,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-echo "Did you boot your cloud VPS in System-Resque mode??.." && \
+echo "Did you boot your cloud VPS in System-Resque mode (usually its live-CD from https://www.system-rescue.org/).." && \
 
 # Latest Stable
 CHR_VERSION=7.8
