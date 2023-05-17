@@ -89,9 +89,9 @@ echo $INIROS > /mnt/rw/autorun.scr  && \
 echo "Well, start DD" && \
 dmesg -n 1 && \
 umount /mnt && \
-losetup -d $LOOP_DEV && \ 
+losetup -d ${LOOP_DEV} && \ 
 echo u > /proc/sysrq-trigger && \
-dd if=chr-${CHR_VERSION}.img bs=32768 of=/dev/${$STORAGE} conv=fsync && \
+dd if=chr-${CHR_VERSION}.img bs=32768 of=/dev/${STORAGE} conv=fsync && \
 echo -e "\x1b[31mGOODBYE...\x1b[0m" && \
 sleep 1 && \
 echo b > /proc/sysrq-trigger
