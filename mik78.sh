@@ -77,7 +77,7 @@ fdisk -l && \
 read -p "DISK to install to (${STORAGE}): " STORAGE
 
 echo "Attach image as loop device" && \
-LOOP_DEV=`losetup --show -Pf chr.img`  && \
+LOOP_DEV=`losetup --show -Pf chr-${CHR_VERSION}.img`  && \
 echo "Mount ROSv7 boot partition fot initial script deploy" && \
 # boot partition for ROS v7 locates here, yep p2 is not an occasion
 mount ${LOOP_DEV}p2 /mnt  && \
@@ -91,7 +91,7 @@ dmesg -n 1 && \
 umount /mnt && \
 losetup -d $LOOP_DEV && \ 
 echo u > /proc/sysrq-trigger && \
-dd if=chr.img bs=32768 of=/dev/${$STORAGE} conv=fsync && \
+dd if=chr-${CHR_VERSION}.img bs=32768 of=/dev/${$STORAGE} conv=fsync && \
 echo -e "\x1b[31mGOODBYE...\x1b[0m" && \
 sleep 1 && \
 echo b > /proc/sysrq-trigger
