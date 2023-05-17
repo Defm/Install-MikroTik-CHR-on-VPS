@@ -42,6 +42,8 @@ EOF
 )
 
 echo "Did you boot your cloud VPS in System-Rescue mode (usually its live-CD from https://www.system-rescue.org/).." && \
+echo "If you would like SSH (not VNC) - stop Iptables first with: systemctl stop iptables" && \
+echo "And set root password with: passwd" && \
 
 # Latest Stable
 CHR_VERSION=7.8 && \
