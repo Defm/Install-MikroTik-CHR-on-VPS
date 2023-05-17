@@ -12,7 +12,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # unzip needed
-if ! [ -x "$(command -v unzip)" ]; then
+if ! [ -x "$(command -v gunzip)" ]; then
   echo "Error: unzip is not installed" >&2
   exit 1
 fi
@@ -57,14 +57,13 @@ echo "Gateway ${GATEWAY}" && \
 echo "Target disk ${STORAGE}" && \
 
 read -p "CHR version to install (${CHR_VERSION}): " CHR_VERSION && \
+CHR_URL="https://download.mikrotik.com/routeros/${CHR_VERSION}/chr-${CHR_VERSION}.img.zip" && \
 
 echo "Picking ROS from officials" && \
 mkdir /tmp/ros && \
 mount -t tmpfs -o size=200M tmpfs /tmp/ros/ && \
 cd /tmp/ros && \
-wget --show-progress --no-check-certificate -qO routeros.zip https://download.mikrotik.com/routeros/$CHR_VERSION/chr-$CHR_VERSION.img.zip && \
-echo "Unzipping image" && \
-unzip routeros.zip && \
+[ ! -e chr.img ] && wget --show-progress --no-check-certificate -qO- "${CHR_URL}" | gunzip -c - > chr.img && \
 sleep 5 && \
 
 echo "Disks info" && \
@@ -73,7 +72,7 @@ fdisk -l && \
 read -p "DISK to install to (${STORAGE}): " STORAGE
 
 echo "Attach image as loop device" && \
-LOOP_DEV=`losetup --show -Pf chr-$CHR_VERSION.img`  && \
+LOOP_DEV=`losetup --show -Pf chr.img`  && \
 echo "Mount ROSv7 boot partition fot initial script deploy" && \
 # boot partition for ROS v7 locates here, yep p2 is not an occasion
 mount ${LOOP_DEV}p2 /mnt  && \
@@ -87,7 +86,7 @@ dmesg -n 1 && \
 umount /mnt && \
 losetup -d $LOOP_DEV && \ 
 echo u > /proc/sysrq-trigger && \
-dd if=chr-$CHR_VERSION.img bs=32768 of=/dev/${$STORAGE} conv=fsync && \
+dd if=chr.img bs=32768 of=/dev/${$STORAGE} conv=fsync && \
 echo -e "\x1b[31mGOODBYE...\x1b[0m" && \
 sleep 1 && \
 echo b > /proc/sysrq-trigger
