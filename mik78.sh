@@ -52,6 +52,10 @@ ETH=`ip route show default | sed -n 's/.* dev \([^\ ]*\) .*/\1/p'` && \
 ADDRESS=`ip addr show $ETH | grep global | cut -d' ' -f 6 | head -n 1` && \
 GATEWAY=`ip route list | grep default | cut -d' ' -f 3` && \
 
+echo "Address ${ADDRESS}" && \
+echo "Gateway ${GATEWAY}" && \
+echo "Target disk ${STORAGE}" && \
+
 read -p "CHR version to install (${CHR_VERSION}): " CHR_VERSION && \
 
 echo "Picking ROS from officials" && \
@@ -70,7 +74,7 @@ read -p "DISK to install to (${STORAGE}): " STORAGE
 
 echo "Attach image as loop device" && \
 LOOP_DEV=`losetup --show -Pf chr-$CHR_VERSION.img`  && \
-echo "Here is image internals" && \
+echo "Mount ROSv7 boot partition fot initial script deploy" && \
 # boot partition for ROS v7 locates here, yep p2 is not an occasion
 mount ${LOOP_DEV}p2 /mnt  && \
 echo "Here is image internals" && \
