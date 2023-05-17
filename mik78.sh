@@ -63,7 +63,11 @@ echo "Picking ROS from officials" && \
 mkdir /tmp/ros && \
 mount -t tmpfs -o size=200M tmpfs /tmp/ros/ && \
 cd /tmp/ros && \
-[ ! -e chr.img ] && wget --show-progress --no-check-certificate -qO- "${CHR_URL}" | gunzip -c - > chr.img && \
+echo "Downloading" && \
+wget --no-check-certificate -qO chr.img.zip "${CHR_URL}" && \
+sleep 2 && \
+echo "Gunzipping" && \
+gunzip -c chr.img.zip && \
 sleep 5 && \
 
 echo "Disks info" && \
