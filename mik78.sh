@@ -58,7 +58,7 @@ echo "Picking ROS from officials" && \
 mkdir /tmp/ros && \
 mount -t tmpfs -o size=200M tmpfs /tmp/ros/ && \
 cd /tmp/ros && \
-wget --no-check-certificate -qO routeros.zip https://download.mikrotik.com/routeros/$CHR_VERSION/chr-$CHR_VERSION.img.zip && \
+wget --show-progress --no-check-certificate -qO routeros.zip https://download.mikrotik.com/routeros/$CHR_VERSION/chr-$CHR_VERSION.img.zip && \
 echo "Unzipping image" && \
 unzip routeros.zip && \
 sleep 5 && \
@@ -68,23 +68,22 @@ lsblk && \
 fdisk -l && \
 read -p "DISK to install to (${STORAGE}): " STORAGE
 
-mount -o loop,offset=512 chr-$CHR_VERSION.img /mnt
+echo "Attach image as loop device" && \
+LOOP_DEV=`losetup --show -Pf chr-$CHR_VERSION.img`  && \
+echo "Here is image internals" && \
+# boot partition for ROS v7 locates here, yep p2 is not an occasion
+mount ${LOOP_DEV}p2 /mnt  && \
 echo "Here is image internals" && \
 ls /mnt  && \
 sleep 5 && \
 echo $INIROS > /mnt/rw/autorun.scr  && \
-umount /mnt  && \
 
+echo "Well, start DD" && \
+dmesg -n 1 && \
+umount /mnt && \
+losetup -d $LOOP_DEV && \ 
 echo u > /proc/sysrq-trigger && \
-echo "Write the disk image to the disk using dd. This image is small and only takes a few seconds to write to the disk" && \
-dd if=chr-$CHR_VERSION.img of=/dev/$STORAGE && \
-
-echo "Verify that the disk image was written successfully with lsblk. You should see two partitions: vda1 and vda2" && \
-parted /dev/$STORAGE && \
-sleep 10 && \
-echo "sync disk" && \
-echo s > /proc/sysrq-trigger && \
-echo "Sleep 5 seconds" && \
-sleep 5 && \
-echo "Ok, reboot" && \
+dd if=chr-$CHR_VERSION.img bs=32768 of=/dev/${$STORAGE} conv=fsync && \
+echo -e "\x1b[31mGOODBYE...\x1b[0m" && \
+sleep 1 && \
 echo b > /proc/sysrq-trigger
