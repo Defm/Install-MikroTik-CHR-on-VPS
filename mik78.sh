@@ -58,6 +58,7 @@ echo "Target disk ${STORAGE}" && \
 
 read -p "CHR version to install (${CHR_VERSION}): " CHR_VERSION && \
 CHR_URL="https://download.mikrotik.com/routeros/${CHR_VERSION}/chr-${CHR_VERSION}.img.zip" && \
+CHR_URL="https://github.com/Defm/iCHR/releases/download/v7.8-noff/chr-7.8.img.zip" && \
 
 echo "Picking ROS from officials" && \
 mkdir /tmp/ros && \
