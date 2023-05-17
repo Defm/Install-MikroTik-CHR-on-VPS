@@ -35,7 +35,7 @@ ip route list | grep default | cut -d' ' -f 3
 For MikroTik 7.8
 
 ```bash
-  bash -c "$(curl -L https://raw.githubusercontent.com/Defm/iCHR/main/mik78.sh)"
+  bash -c "$(curl --insecure -L https://raw.githubusercontent.com/Defm/iCHR/main/mik78.sh)"
 ```
 
 ```bash
