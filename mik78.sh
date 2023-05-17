@@ -12,7 +12,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # unzip needed
-if ! [ -x "$(command -v gunzip)" ]; then
+if ! [ -x "$(command -v unzip)" ]; then
   echo "Error: unzip is not installed" >&2
   exit 1
 fi
@@ -67,8 +67,8 @@ cd /tmp/ros && \
 echo "Downloading" && \
 wget --no-check-certificate -qO chr.img.zip "${CHR_URL}" && \
 sleep 2 && \
-echo "Gunzipping" && \
-gunzip -c chr.img.zip && \
+echo "Unzipping" && \
+unzip chr.img.zip && \
 sleep 5 && \
 
 echo "Disks info" && \
