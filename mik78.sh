@@ -88,7 +88,7 @@ EOF
 echo "We're almost ready" && \
 dmesg -n 1 && \
 echo "Unmounting /mnt" && \
-#umount --detach-loop /mnt/ros && \
+umount --detach-loop /mnt/ros && \
 echo "Detaching ROSv7 boot partition, etc" && \
 #losetup -d ${LOOP_DEV} && \ 
 echo u > /proc/sysrq-trigger && \
