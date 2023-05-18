@@ -60,9 +60,8 @@ echo "Mount ROSv7 boot partition fot initial script deploy" && \
 mkdir -p /mnt/ros && \
 mount ${LOOP_DEV}p2 /mnt/ros  && \
 echo "Here is image internals" && \
-ls /mnt  && \
+ls /mnt/ros  && \
 sleep 5 && \
-echo "$INIROS" > /mnt/rw/autorun.scr  && \
 cat > '/mnt/ros/rw/autorun.scr' <<EOF
 :do {
   :log warning "USERS -----------------------------------------------------------------------------"
