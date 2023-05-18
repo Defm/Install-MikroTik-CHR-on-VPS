@@ -57,12 +57,13 @@ echo "Attach image as loop device" && \
 LOOP_DEV=`losetup --show -Pf chr-${CHR_VERSION}.img`  && \
 echo "Mount ROSv7 boot partition fot initial script deploy" && \
 # boot partition for ROS v7 locates here, yep p2 is not an occasion
-mount ${LOOP_DEV}p2 /mnt  && \
+mkdir -p /mnt/ros && \
+mount ${LOOP_DEV}p2 /mnt/ros  && \
 echo "Here is image internals" && \
 ls /mnt  && \
 sleep 5 && \
 echo "$INIROS" > /mnt/rw/autorun.scr  && \
-cat > '/mnt/rw/autorun.scr' <<EOF
+cat > '/mnt/ros/rw/autorun.scr' <<EOF
 :do {
   :log warning "USERS -----------------------------------------------------------------------------"
   :local mgmtUsername "owner"; # main administrator
@@ -88,9 +89,9 @@ EOF
 echo "We're almost ready" && \
 dmesg -n 1 && \
 echo "Unmounting /mnt" && \
-umount /mnt && \
+#umount --detach-loop /mnt/ros && \
 echo "Detaching ROSv7 boot partition, etc" && \
-losetup -d ${LOOP_DEV} && \ 
+#losetup -d ${LOOP_DEV} && \ 
 echo u > /proc/sysrq-trigger && \
 echo "Well, start DD" && \
 dd if=chr-${CHR_VERSION}.img bs=32768 of=/dev/${STORAGE} conv=fsync && \
