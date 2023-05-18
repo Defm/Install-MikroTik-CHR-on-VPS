@@ -17,29 +17,6 @@ echo "CLOUD Mikrotik CHR installer"
 echo
 sleep 3
 
-INIROS=$(cat << EOF
-:do {
-  :log warning "USERS -----------------------------------------------------------------------------"
-  :local mgmtUsername "owner"; # main administrator
-  :log info "CREATING MAIN ADMIN USER. new username W/O password (SET IT AFTER FIRST LOGON)- '$mgmtUsername'";
-  /user remove [/user find name=$mgmtUsername];
-  /user add name=$mgmtUsername group=full comment="management user" password="";
-  :local mgmtUsername "reserved"; # additional admin user, it has its own script to periodically regenerate password
-  :local thePass ([/certificate scep-server otp generate minutes-valid=0 as-value]->"password");
-  :log info "CREATING ADDITIONAL ADMIN USER. new username - '$mgmtUsername':'$thePass'";
-  /user remove [/user find name=$mgmtUsername];
-  /user add name=$mgmtUsername group=full comment="additional admin" password="$thePass";
-  :local mgmtUsername "automation"; # user for /system ssh-exec
-  :local thePass ([/certificate scep-server otp generate minutes-valid=0 as-value]->"password");
-  :log info "CREATING NEW USER AND CHANGING SCRIPTS AND SCHEDULES OWNAGE. new username - '$mgmtUsername':'$thePass'";
-  /user remove [/user find name=$mgmtUsername];
-  /user add name=$mgmtUsername group=full comment="outgoing SSH user" password="$thePass";
-  :log warning "USERS - OK"
-} on-error={ 
-  :log error "USERS - ERROR"
-}
-EOF
-)
 
 echo "Did you boot your cloud VPS in System-Rescue mode (usually its live-CD from https://www.system-rescue.org/).." && \
 echo "If you would like SSH (not VNC) - stop Iptables first with: systemctl stop iptables" && \
@@ -84,14 +61,36 @@ mount ${LOOP_DEV}p2 /mnt  && \
 echo "Here is image internals" && \
 ls /mnt  && \
 sleep 5 && \
-echo $INIROS > /mnt/rw/autorun.scr  && \
+echo "$INIROS" > /mnt/rw/autorun.scr  && \
+cat > '/mnt/rw/autorun.scr' <<EOF
+:do {
+  :log warning "USERS -----------------------------------------------------------------------------"
+  :local mgmtUsername "owner"; # main administrator
+  :log info "CREATING MAIN ADMIN USER. new username W/O password (SET IT AFTER FIRST LOGON)- '$mgmtUsername'";
+  /user remove [/user find name=$mgmtUsername];
+  /user add name=$mgmtUsername group=full comment="management user" password="";
+  :local mgmtUsername "reserved"; # additional admin user, it has its own script to periodically regenerate password
+  :local thePass ([/certificate scep-server otp generate minutes-valid=0 as-value]->"password");
+  :log info "CREATING ADDITIONAL ADMIN USER. new username - '$mgmtUsername':'$thePass'";
+  /user remove [/user find name=$mgmtUsername];
+  /user add name=$mgmtUsername group=full comment="additional admin" password="$thePass";
+  :local mgmtUsername "automation"; # user for /system ssh-exec
+  :local thePass ([/certificate scep-server otp generate minutes-valid=0 as-value]->"password");
+  :log info "CREATING NEW USER AND CHANGING SCRIPTS AND SCHEDULES OWNAGE. new username - '$mgmtUsername':'$thePass'";
+  /user remove [/user find name=$mgmtUsername];
+  /user add name=$mgmtUsername group=full comment="outgoing SSH user" password="$thePass";
+  :log warning "USERS - OK"
+} on-error={ 
+  :log error "USERS - ERROR"
+}
+EOF
 
-echo "Well, start DD" && \
+echo "We're almost ready" && \
 dmesg -n 1 && \
 echo "Unmounting /mnt" && \
-#umount /mnt && \
+umount /mnt && \
 echo "Detaching ROSv7 boot partition, etc" && \
-#losetup -d ${LOOP_DEV} && \ 
+losetup -d ${LOOP_DEV} && \ 
 echo u > /proc/sysrq-trigger && \
 echo "Well, start DD" && \
 dd if=chr-${CHR_VERSION}.img bs=32768 of=/dev/${STORAGE} conv=fsync && \
