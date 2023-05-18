@@ -1,21 +1,21 @@
 #!/bin/bash -e
 
-echo
-echo "=== MikroTik 7 Installer ==="
-echo
-sleep 3
-
 # must be root
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" >&2
+   echo -e "\x1b[31mThis script must be run as root...\x1b[0m"
    exit 1
 fi
 
 # unzip needed
 if ! [ -x "$(command -v unzip)" ]; then
-  echo "Error: unzip is not installed" >&2
+  echo -e "\x1b[31mError: unzip is not installed...\x1b[0m"
   exit 1
 fi
+
+echo
+echo "CLOUD Mikrotik CHR installer"
+echo
+sleep 3
 
 INIROS=$(cat << EOF
 :do {
@@ -58,7 +58,7 @@ echo "Target disk ${STORAGE}" && \
 
 read -p "CHR version to install (${CHR_VERSION}): " CHR_VERSION && \
 CHR_URL="https://download.mikrotik.com/routeros/${CHR_VERSION}/chr-${CHR_VERSION}.img.zip" && \
-CHR_URL="https://github.com/Defm/iCHR/releases/download/v7.8-noff/chr-7.8.img.zip" && \
+#CHR_URL="https://github.com/Defm/iCHR/releases/download/v7.8-noff/chr-7.8.img.zip" && \
 
 echo "Picking ROS from officials" && \
 mkdir -p /tmp/ros && \
