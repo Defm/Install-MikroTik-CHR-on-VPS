@@ -55,6 +55,7 @@ read -p "DISK to install to (${STORAGE}): " STORAGE
 
 echo "Attach image as loop device" && \
 LOOP_DEV=`losetup --show -Pf chr-${CHR_VERSION}.img`  && \
+sleep 3 && \
 echo "Mount ROSv7 boot partition fot initial script deploy" && \
 # boot partition for ROS v7 locates here, yep p2 is not an occasion
 mkdir -p /mnt/ros && \
