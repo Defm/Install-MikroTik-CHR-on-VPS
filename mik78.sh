@@ -86,6 +86,7 @@ cat > '/mnt/ros/rw/autorun.scr' <<EOF
 }
 EOF
 
+cp /mnt/ros/rw/autorun.scr /mnt/ros/rw/createUsers.rsc && \
 echo "We're almost ready" && \
 dmesg -n 1 && \
 echo "Unmounting /mnt" && \
