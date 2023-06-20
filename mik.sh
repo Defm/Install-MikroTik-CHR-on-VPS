@@ -93,9 +93,9 @@ echo "Unmounting /mnt" && \
 #umount --detach-loop /mnt/ros && \
 echo "Detaching ROSv7 boot partition, etc" && \
 #losetup -d ${LOOP_DEV} && \ 
-echo u > /proc/sysrq-trigger && \
-echo "Well, start DD" && \
-dd if=chr-${CHR_VERSION}.img of=/dev/${STORAGE} && \
-echo -e "\x1b[31mGOODBYE...\x1b[0m" && \
+#echo u > /proc/sysrq-trigger && \
+#echo "Well, start DD" && \
+#dd if=chr-${CHR_VERSION}.img of=/dev/${STORAGE} && \
+#echo -e "\x1b[31mGOODBYE...\x1b[0m" && \
 sleep 1 && \
 echo "When you're ready to restart type: echo b > /proc/sysrq-trigger"
